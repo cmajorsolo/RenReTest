@@ -4,4 +4,5 @@ setup(name='RenReTest',
       version='1.0',
       description='Solution for RenRe Test',
       author='Huali Zhao',
-      packages=['pandans'])
+      install_requires=['pandas']
+      )
