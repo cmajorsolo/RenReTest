@@ -17,4 +17,4 @@ FindDealsCoveredByRenRe.py
 However, pandas can not do filtering csv files without same indexes. So for creating the same data format,
 more complexity produced during the process.
 
-![alt text](https://raw.githubusercontent.com/username/projectname/branch/path/to/img.png)
+![alt text](https://raw.githubusercontent.com/cmajorsolo/RenReTest/master/comparing.png)
