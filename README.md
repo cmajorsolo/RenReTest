@@ -3,7 +3,8 @@ The solutuion is built with Python 3.6.1 and Pandas 0.20.2
 
 # Considerations
 1. To process the data larger than the memory, parameter chunksize can be added in the read_csv file.
-* e.g. for chunk in pd.read_csv(filePath, chunksize=10000000000):
+* e.g.
+*      for chunk in pd.read_csv(filePath, chunksize=10000000000):
 *          process(chunk)
 
 
