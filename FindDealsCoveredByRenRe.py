@@ -17,31 +17,34 @@ class FindDealsCoveredByRenRe():
         except Exception:
             self.get_exception_details()
 
-
     def generate_contracts_covered_by_RenRe(self, coveredContractFilePath):
+        if os.path.exists(coveredContractFilePath):
+            os.remove(coveredContractFilePath)
         try:
-            deals_df = pd.read_csv(self.dealsFilePath)
             contract_df = pd.read_json(self.contractFilePath)
             contractConstrains = Utilities.extract_contract_info(contract_df['Coverage'])
-            deals_df = deals_df.loc[deals_df['Location'].isin(contractConstrains[0])
-                                    & ~deals_df['Peril'].isin(contractConstrains[1])]
-            deals_df.to_csv(coveredContractFilePath, index=False)
+            chunkSize = 1000
+            for chunk in pd.read_csv(self.dealsFilePath, chunksize=chunkSize):
+                chunk = chunk.loc[chunk['Location'].isin(contractConstrains[0]) & ~chunk['Peril'].isin(contractConstrains[1])]
+                chunk.to_csv(coveredContractFilePath, mode='a', index=False)
         except Exception:
             self.get_exception_details()
 
     def generate_loss_report(self, coveredContractFilePath, lossReportFilePath):
         self.get_max_coverage_value()
-
+        if os.path.exists(lossReportFilePath):
+            os.remove(lossReportFilePath)
         try:
-            loss_df = pd.read_csv(self.lossesFilePath)
             if(not os.path.exists(coveredContractFilePath)):
                 self.generate_contracts_covered_by_RenRe(coveredContractFilePath)
-            covered_contract_df = pd.read_csv(coveredContractFilePath)
-            loss_covered_by_RenRe_df = pd.merge(loss_df, covered_contract_df, on=['DealId'])[['Loss', 'Peril']]
-            loss_covered_by_RenRe_df['Loss'] = loss_covered_by_RenRe_df.apply(
-                lambda row: Utilities.process_claim(row['Loss'], self.maxCoverageValue), axis=1)
-            loss_covered_by_RenRe_df = loss_covered_by_RenRe_df.groupby('Peril').agg(sum)
-            loss_covered_by_RenRe_df.to_csv(lossReportFilePath)
+            loss_df = pd.read_csv(self.lossesFilePath)
+            chunkSize = 1000
+            for chunk in pd.read_csv(coveredContractFilePath, chunksize=chunkSize):
+                covered_chunk = pd.merge(loss_df, chunk, on=['DealId'])[['Loss', 'Peril']]
+                covered_chunk['Loss'] = covered_chunk.apply(
+                    lambda row: Utilities.process_claim(row['Loss'], self.maxCoverageValue), axis=1)
+                covered_chunk = covered_chunk.groupby('Peril').agg(sum)
+                covered_chunk.to_csv(lossReportFilePath, mode='a')
         except Exception:
             self.get_exception_details()
 
