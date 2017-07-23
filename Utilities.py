@@ -1,4 +1,4 @@
-def extract_contract_info(coverage_list):git
+def extract_contract_info(coverage_list):
     includes = []
     excludes = []
     for coverage in coverage_list:
