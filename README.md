@@ -1,9 +1,9 @@
 # RenReTest
-The solutuion is built with Python 3.6.1 and Pandas 0.20.2
-The Final Solution is FindDealsCoveredByRenRe.py.
-The input files are in Input folder.
-The output files are in Output folder.
-The test output files are in Output/Test folder.
+The solutuion is built with Python 3.6.1 and Pandas 0.20.2  
+The Final Solution is FindDealsCoveredByRenRe.py.  
+The input files are in Input folder.  
+The output files are in Output folder.  
+The test output files are in Output/Test folder.  
 
 # Considerations
 1. The final solution FindDealsCoveredByRenRe used chunk in Pandas to handle large files. Other solutions could be using
